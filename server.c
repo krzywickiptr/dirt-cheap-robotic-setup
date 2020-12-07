@@ -26,26 +26,7 @@ void loop() {
     char command = Serial.read();
     printf("Received command: %c\n", command);
 
-    if (command == 'S') {
-      for (int i = 0; i < number_servos; ++i)
-        servo_saved[i][saved_positions] = pot_angle[i];
-      
-      saved_positions += 1;
-      printf("Position %d saved\n", saved_positions);
-      delay(1500);
-    } else if (command == 'P') {
-      for (int i = 0; i < saved_positions; ++i)
-        for (int j = 0; j < number_servos; ++j) {
-          servo[j].write(servo_saved[j][i]);
-          delay(500);
-        }
-       
-      printf("Executed sequence of %d positions.\n", saved_positions);
-      delay(2000);
-    } else if (command == 'R') {
-      saved_positions = 0;
-      printf("Removed saved moves.\n");
-    } else if (command >= 'A' && command <= 'D') {
+    if (command >= 'A' && command <= 'D') {
       int value = Serial.parseInt();
       int diff = value - pot_angle[command - 'A'];
 
@@ -56,8 +37,6 @@ void loop() {
 
       pot_angle[command - 'A'] = value;
       printf("Executed, current state: %d %d %d %d\n", pot_angle[0], pot_angle[1], pot_angle[2], pot_angle[3]);
-    } else if (command == 'E') {
-      
     } else {
       printf("Command unknown.\n");
     }
